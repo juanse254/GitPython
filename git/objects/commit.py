@@ -81,7 +81,7 @@ class Commit(base.Object, Iterable, Diffable, Traversable, Serializable):
         :param tree: Tree
             Tree object
         :param author: Actor
-            is the author Actor object
+            is the author string ( will be implicitly converted into an Actor object )
         :param authored_date: int_seconds_since_epoch
             is the authored DateTime - use time.gmtime() to convert it into a
             different format
@@ -280,7 +280,7 @@ class Commit(base.Object, Iterable, Diffable, Traversable, Serializable):
 
     @classmethod
     def create_from_tree(cls, repo, tree, message, parent_commits=None, head=False, author=None, committer=None,
-                         author_date=None, commit_date=None):
+                         author_date=None, commit_date=None, author_timezone=None):
         """Commit the given tree, creating a commit object.
 
         :param repo: Repo object the commit should be part of
@@ -345,7 +345,7 @@ class Commit(base.Object, Iterable, Diffable, Traversable, Serializable):
 
         author_date_str = env.get(cls.env_author_date, '')
         if author_date:
-            author_time, author_offset = parse_date(author_date)
+            author_time, author_offset = author_date, author_timezone
         elif author_date_str:
             author_time, author_offset = parse_date(author_date_str)
         else:
@@ -354,7 +354,7 @@ class Commit(base.Object, Iterable, Diffable, Traversable, Serializable):
 
         committer_date_str = env.get(cls.env_committer_date, '')
         if commit_date:
-            committer_time, committer_offset = parse_date(commit_date)
+            committer_time, committer_offset = commit_date, author_timezone
         elif committer_date_str:
             committer_time, committer_offset = parse_date(committer_date_str)
         else:
