@@ -280,7 +280,7 @@ class Commit(base.Object, Iterable, Diffable, Traversable, Serializable):
 
     @classmethod
     def create_from_tree(cls, repo, tree, message, parent_commits=None, head=False, author=None, committer=None,
-                         author_date=None, commit_date=None, author_timezone=None):
+                         author_date=None, commit_date=None, author_timezone=None, committer_timezone=None):
         """Commit the given tree, creating a commit object.
 
         :param repo: Repo object the commit should be part of
@@ -354,7 +354,7 @@ class Commit(base.Object, Iterable, Diffable, Traversable, Serializable):
 
         committer_date_str = env.get(cls.env_committer_date, '')
         if commit_date:
-            committer_time, committer_offset = commit_date, author_timezone
+            committer_time, committer_offset = commit_date, committer_timezone
         elif committer_date_str:
             committer_time, committer_offset = parse_date(committer_date_str)
         else:
